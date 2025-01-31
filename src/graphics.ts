@@ -1,5 +1,26 @@
 import { Vec2 } from "./math.js"
-import { RenderContext } from "./app.js"
+
+export type RenderContext = {
+    canvas: HTMLCanvasElement
+    ctx: CanvasRenderingContext2D
+}
+
+/**
+ * Creates a new full screen canvas and adds it to the page
+ */
+export function createRenderContext() {
+    const canvas = document.createElement("canvas")
+
+    canvas.width  = window.innerWidth
+    canvas.height = window.innerHeight
+
+    document.body.append(canvas)
+
+    //TODO: assert this
+    const ctx = canvas.getContext("2d") as CanvasRenderingContext2D
+
+    return { canvas: canvas, ctx: ctx }
+}
 
 /**
  * Clears the entire canvas with a given color

@@ -1,5 +1,4 @@
 import { Vec2 } from "./math.js"
-import { RenderContext } from "./app.js"
 
 import * as graphics from "./graphics.js"
 
@@ -78,7 +77,7 @@ export function update(deltaTime: number) {
     }
 }
 
-export function render(ctx: RenderContext) {
+export function render(ctx: graphics.RenderContext) {
     graphics.clearScreen(ctx, "rgb(100, 100, 100)")
 
     for (const body of world) {

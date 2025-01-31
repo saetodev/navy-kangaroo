@@ -1,24 +1,7 @@
-export type RenderContext = {
-    canvas: HTMLCanvasElement
-    ctx: CanvasRenderingContext2D
-}
+import { RenderContext, createRenderContext } from "./graphics.js"
 
 type AppUpdateFn = (deltaTime: number) => void
 type AppRenderFn = (ctx: RenderContext) => void
-
-function createRenderContext() {
-    const canvas = document.createElement("canvas")
-
-    canvas.width  = window.innerWidth
-    canvas.height = window.innerHeight
-
-    document.body.append(canvas)
-
-    //TODO: assert this
-    const ctx = canvas.getContext("2d") as CanvasRenderingContext2D
-
-    return { canvas: canvas, ctx: ctx }
-}
 
 const renderContext = createRenderContext()
 

@@ -6,7 +6,7 @@ export class Vec2 {
         this.x = x
         this.y = y
     }
-
+    
     public length(): number {
         return Math.sqrt((this.x * this.x) + (this.y * this.y))
     }

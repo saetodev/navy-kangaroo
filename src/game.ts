@@ -1,5 +1,5 @@
 import { Vec2 } from "./math.js"
-import { runApp, RenderContext } from "./app.js"
+import { RenderContext } from "./app.js"
 
 import * as graphics from "./graphics.js"
 
@@ -30,7 +30,7 @@ let didInit = false
 
 const world: PhysicsBody[] = []
 
-function update(deltaTime: number) {
+export function update(deltaTime: number) {
     if (!didInit) {
         for (let i = 0; i < 50; i++) {
             const xpos = randomRange(48, window.innerWidth - 48)
@@ -65,26 +65,23 @@ function update(deltaTime: number) {
     }
 
     // check collision
-    for (const body of world) {
-        for (const other of world) {
-            if (body == other) {
-                continue
-            }
+    for (let i = 0; i < world.length - 1; i++) {
+        for (let j = i + 1; j < world.length; j++) {
+            const first  = world[i]
+            const second = world[j]
 
-            if (isRectColliding(body.position, body.size, other.position, other.size)) {
-                body.velocity  = new Vec2(0, 0)
-                other.velocity = new Vec2(0, 0)
+            if (isRectColliding(first.position, first.size, second.position, second.size)) {
+                first.velocity.scale(-1)
+                second.velocity.scale(-1)
             }
         }
     }
 }
 
-function render(ctx: RenderContext) {
+export function render(ctx: RenderContext) {
     graphics.clearScreen(ctx, "rgb(100, 100, 100)")
 
     for (const body of world) {
         graphics.drawRectLines(ctx, body.position, body.size, "blue")
     }
 }
-
-runApp(update, render)

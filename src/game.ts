@@ -15,7 +15,7 @@ function randomInt(min: number, max: number): number {
 }
 
 const world: physics.World = {
-    gravity: new Vec2(0, 0),
+    gravity: new Vec2(0, 980),
     entities: []
 }
 
@@ -30,8 +30,8 @@ export function init() {
             color: colors[randomInt(0, colors.length - 1)],
 
             position: new Vec2(randomRange(48, window.innerWidth - 48), randomRange(48, window.innerHeight - 48)),
-            velocity: new Vec2(randomRange(-300, 300), randomRange(-300, 300)),
-            //velocity: new Vec2(0, 0),
+            //velocity: new Vec2(randomRange(-300, 300), randomRange(-300, 300)),
+            velocity: new Vec2(0, 0),
 
             size: new Vec2(32, 32),
             mass: randomRange(1, 100),

@@ -105,36 +105,36 @@ export function init() {
 
     // place walls
     world.push({
-        position: new Vec2(window.innerWidth / 2, 24),
+        position: new Vec2(window.innerWidth / 2, 0),
         velocity: new Vec2(0, 0),
-        size: new Vec2(window.innerWidth, 48),
+        size: new Vec2(window.innerWidth, 0),
         mass: 0,
         name: "wall",
         color: "black",
     })
 
     world.push({
-        position: new Vec2(window.innerWidth / 2, window.innerHeight - 24),
+        position: new Vec2(window.innerWidth / 2, window.innerHeight),
         velocity: new Vec2(0, 0),
-        size: new Vec2(window.innerWidth, 48),
+        size: new Vec2(window.innerWidth, 0),
         mass: 0,
         name: "wall",
         color: "black",
     })
 
     world.push({
-        position: new Vec2(24, window.innerHeight / 2),
+        position: new Vec2(0, window.innerHeight / 2),
         velocity: new Vec2(0, 0),
-        size: new Vec2(48, window.innerHeight),
+        size: new Vec2(0, window.innerHeight),
         mass: 0,
         name: "wall",
         color: "black",
     })
 
     world.push({
-        position: new Vec2(window.innerWidth - 24, window.innerHeight / 2),
+        position: new Vec2(window.innerWidth, window.innerHeight / 2),
         velocity: new Vec2(0, 0),
-        size: new Vec2(48, window.innerHeight),
+        size: new Vec2(0, window.innerHeight),
         mass: 0,
         name: "wall",
         color: "black",
@@ -174,7 +174,6 @@ export function update(deltaTime: number) {
             const first = world[i]
             const second = world[j]
 
-            //TODO: do collising stuff
             const info = {
                 first: first,
                 second: second,

@@ -6,13 +6,13 @@ export class Vec2 {
         this.x = x
         this.y = y
     }
-    
+
     public length(): number {
         return Math.sqrt((this.x * this.x) + (this.y * this.y))
     }
 
     public toArray(): number[] {
-        return [ this.x, this.y ]
+        return [this.x, this.y]
     }
 
     public copy(): Vec2 {
@@ -68,7 +68,7 @@ export class Vec3 {
     }
 
     public toArray(): number[] {
-        return [ this.x, this.y, this.z ]
+        return [this.x, this.y, this.z]
     }
 
     public copy(): Vec3 {
@@ -129,7 +129,7 @@ export class Vec4 {
     }
 
     public toArray(): number[] {
-        return [ this.x, this.y, this.z, this.w ]
+        return [this.x, this.y, this.z, this.w]
     }
 
     public copy(): Vec4 {
@@ -268,4 +268,14 @@ export function createOrtho(left: number, right: number, bottom: number, top: nu
         new Vec4(0, 2 / (top - bottom), 0, -(top + bottom) / (top - bottom)),
         new Vec4(0, 0, -2 / (far - near), -(far + near) / (far - near)),
         new Vec4(0, 0, 0, 1))
+}
+
+export class Rect {
+    public position: Vec2
+    public size: Vec2
+
+    constructor(position: Vec2, size: Vec2) {
+        this.position = position
+        this.size = size
+    }
 }

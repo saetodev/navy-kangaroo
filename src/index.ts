@@ -1,4 +1,4 @@
 import { runApp } from "./app.js"
-import { update, render } from "./game.js"
+import { init, update, render } from "./game.js"
 
-runApp(update, render)
+runApp(init, update, render)

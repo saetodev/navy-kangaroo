@@ -13,6 +13,7 @@ type PhysicsBody = {
     size: Vec2
     mass: number
 
+    name: string
     color: string
 }
 
@@ -86,33 +87,19 @@ function AABBCollisionInfo(a: AABB, b: AABB, info: CollisionInfo): boolean {
 
 const world: PhysicsBody[] = []
 
+let aDown = false
+let dDown = false
+
+let sDown = false
+
 export function init() {
-    for (let i = 0; i < 25; i++) {
-        const colors = ["red", "orange", "blue"]
-
-        const xpos = randomRange(48, window.innerWidth - 48)
-        const ypos = randomRange(48, window.innerHeight - 48)
-
-        const xvel = randomRange(-300, 300)
-        const yvel = randomRange(-300, 300)
-
-        const colorIndex = randomInt(0, colors.length)
-
-        world.push({
-            position: new Vec2(xpos, ypos),
-            velocity: new Vec2(xvel, yvel),
-            size: new Vec2(32, 32),
-            mass: randomRange(25, 100),
-            color: colors[colorIndex]
-        })
-    }
-
     world.push({
         position: new Vec2(window.innerWidth / 2, window.innerHeight / 2),
         velocity: new Vec2(0, 0),
         size: new Vec2(32, 32),
         mass: 60,
 
+        name: "player",
         color: "orange",
     })
 
@@ -122,6 +109,7 @@ export function init() {
         velocity: new Vec2(0, 0),
         size: new Vec2(window.innerWidth, 48),
         mass: 0,
+        name: "wall",
         color: "black",
     })
 
@@ -130,6 +118,7 @@ export function init() {
         velocity: new Vec2(0, 0),
         size: new Vec2(window.innerWidth, 48),
         mass: 0,
+        name: "wall",
         color: "black",
     })
 
@@ -138,6 +127,7 @@ export function init() {
         velocity: new Vec2(0, 0),
         size: new Vec2(48, window.innerHeight),
         mass: 0,
+        name: "wall",
         color: "black",
     })
 
@@ -146,27 +136,36 @@ export function init() {
         velocity: new Vec2(0, 0),
         size: new Vec2(48, window.innerHeight),
         mass: 0,
+        name: "wall",
         color: "black",
     })
 }
 
 export function update(deltaTime: number) {
+    let player: PhysicsBody | null = null
+
+    for (let i = 0; i < world.length; i++) {
+        if (world[i].name === "player") {
+            player = world[i]
+        }
+    }
+
+    if (player) {
+        if (sDown) {
+            player.velocity.y = -100
+        }
+
+        player.velocity.x = ((dDown ? 1 : 0) - (aDown ? 1 : 0)) * 150
+    }
+
     // update positions
     for (const body of world) {
         if (body.mass === 0) {
             continue
         }
 
-        body.velocity.add(new Vec2(0, 98).scale(deltaTime))
+        body.velocity.add(new Vec2(0, 980).scale(deltaTime))
         body.position.add(body.velocity.copy().scale(deltaTime))
-
-        if (body.position.x <= 0 || body.position.x >= window.innerWidth) {
-            body.velocity.x = -body.velocity.x
-        }
-
-        if (body.position.y <= 0 || body.position.y >= window.innerHeight) {
-            body.velocity.y = -body.velocity.y
-        }
     }
 
     // check collision
@@ -201,8 +200,15 @@ export function update(deltaTime: number) {
 
                 const restitution = 0.67
 
-                first.velocity.scale(-1 * restitution)
-                second.velocity.scale(-1 * restitution)
+                if (info.point.normal.x == 1 || info.point.normal.x == -1) {
+                    first.velocity.x *= -restitution
+                    second.velocity.x *= -restitution
+                }
+
+                if (info.point.normal.y == 1 || info.point.normal.y == -1) {
+                    first.velocity.y *= -restitution
+                    second.velocity.y *= -restitution
+                }
             }
         }
     }
@@ -211,9 +217,45 @@ export function update(deltaTime: number) {
 export function render(ctx: graphics.RenderContext) {
     graphics.clearScreen(ctx, "rgb(100, 100, 100)")
 
-    graphics.drawCircle(ctx, new Vec2(window.innerWidth / 2, window.innerHeight / 2), 3, "red")
-
     for (const body of world) {
         graphics.drawRectLines(ctx, body.position, body.size, body.color)
     }
 }
+
+document.addEventListener("keydown", (e) => {
+    switch (e.key) {
+        case 'a': {
+            aDown = true
+            break
+        }
+
+        case 'd': {
+            dDown = true
+            break
+        }
+
+        case 's': {
+            sDown = true
+            break
+        }
+    }
+})
+
+document.addEventListener("keyup", (e) => {
+    switch (e.key) {
+        case 'a': {
+            aDown = false
+            break
+        }
+
+        case 'd': {
+            dDown = false
+            break
+        }
+
+        case 's': {
+            sDown = false
+            break
+        }
+    }
+})

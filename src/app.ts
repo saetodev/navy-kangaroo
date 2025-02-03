@@ -15,8 +15,10 @@ export function runApp(initCallback: AppInitFn, updateCallback: AppUpdateFn, ren
 
     function mainLoop() {
         const nowTime = performance.now()
-        const deltaTime = (nowTime - lastTime) / 1000
+        let deltaTime = (nowTime - lastTime) / 1000
         lastTime = nowTime
+
+        deltaTime = deltaTime > 0.017 ? 0.017 : deltaTime
 
         if (updateCallback) {
             updateCallback(deltaTime)

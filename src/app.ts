@@ -18,6 +18,7 @@ export function runApp(initCallback: AppInitFn, updateCallback: AppUpdateFn, ren
         let deltaTime = (nowTime - lastTime) / 1000
         lastTime = nowTime
 
+        //TODO: war crime right here
         deltaTime = deltaTime > 0.017 ? 0.017 : deltaTime
 
         if (updateCallback) {

@@ -15,31 +15,11 @@ function randomInt(min: number, max: number): number {
 }
 
 const world: physics.World = {
-    gravity: new Vec2(0, 980),
+    gravity: new Vec2(0, 9800),
     entities: []
 }
 
 export function init() {
-    for (let i = 0; i < 100; i++) {
-        const colors = [ "red", "orange", "yellow", "cyan", "blue" ]
-
-        world.entities.push({
-            id: 0,
-
-            name: "",
-            color: colors[randomInt(0, colors.length - 1)],
-
-            position: new Vec2(randomRange(48, window.innerWidth - 48), randomRange(48, window.innerHeight - 48)),
-            //velocity: new Vec2(randomRange(-300, 300), randomRange(-300, 300)),
-            velocity: new Vec2(0, 0),
-
-            size: new Vec2(32, 32),
-            mass: randomRange(1, 100),
-            restitution: 0.67,
-        })
-    }
-
-    /*
     // place player
     world.entities.push({
         id: 0,
@@ -54,7 +34,6 @@ export function init() {
         mass: 60,
         restitution: 0.67,
     })
-    */
 
     // place walls
     world.entities.push({

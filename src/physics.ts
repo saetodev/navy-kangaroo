@@ -72,7 +72,7 @@ function isAABBColliding(a: AABB, b: AABB): boolean {
     return { colliding: true, point: { normal: bestAxis, penetration: penetration }}
 }
 
-function resolveAABBCollision(a: Entity, b: Entity, point: ContactPoint) {
+function resolveImpulseAABBCollision(a: Entity, b: Entity, point: ContactPoint) {
     const aInvMass = a.mass !== 0 ? 1 / a.mass : 0
     const bInvMass = b.mass !== 0 ? 1 / b.mass : 0
 
@@ -86,15 +86,13 @@ function resolveAABBCollision(a: Entity, b: Entity, point: ContactPoint) {
 
     const effectiveRestitution = Math.sqrt(a.restitution * b.restitution)
 
-    if (point.normal.x === 1 || point.normal.x === -1) {
-        a.velocity.x *= -effectiveRestitution
-        b.velocity.x *= -effectiveRestitution
-    }
+    const relativeVelocity  = a.velocity.copy().sub(b.velocity)
+    const collisionVelocity = relativeVelocity.copy().scale(-(1 + effectiveRestitution)).dot(point.normal)
     
-    if (point.normal.y === 1 || point.normal.y === -1) {
-        a.velocity.y *= -effectiveRestitution
-        b.velocity.y *= -effectiveRestitution
-    }
+    const impulse = collisionVelocity / totalMass
+
+    a.velocity.add(point.normal.copy().scale(impulse * aInvMass)) 
+    b.velocity.sub(point.normal.copy().scale(impulse * bInvMass)) 
 }
 
 export function step(world: World, deltaTime: number) {
@@ -103,8 +101,29 @@ export function step(world: World, deltaTime: number) {
             continue
         }
 
+        /*
         entity.velocity.add(world.gravity.copy().scale(deltaTime))
         entity.position.add(entity.velocity.copy().scale(deltaTime))
+        */
+
+        {
+            const k1 = world.gravity.copy()
+            const k2 = world.gravity.copy().add(k1.scale(0.5 * deltaTime))
+            const k3 = world.gravity.copy().add(k2.scale(0.5 * deltaTime))
+            const k4 = world.gravity.copy().add(k3.scale(deltaTime))
+
+            entity.velocity.add(k1.add(k2.scale(2)).add(k3.scale(2)).add(k4).scale(deltaTime / 6))
+        }
+
+        
+        {
+            const k1 = entity.velocity.copy()
+            const k2 = entity.velocity.copy().add(k1.scale(0.5 * deltaTime))
+            const k3 = entity.velocity.copy().add(k2.scale(0.5 * deltaTime))
+            const k4 = entity.velocity.copy().add(k3.scale(deltaTime))
+
+            entity.position.add(k1.add(k2.scale(2)).add(k3.scale(2)).add(k4).scale(deltaTime / 6))
+        }
     }
 }
 
@@ -122,7 +141,7 @@ export function maybeResolveCollisions(world: World) {
                 continue
             }
 
-            resolveAABBCollision(a, b, result.point)
+            resolveImpulseAABBCollision(a, b, result.point)
         }
     }
 }

@@ -101,29 +101,8 @@ export function step(world: World, deltaTime: number) {
             continue
         }
 
-        /*
         entity.velocity.add(world.gravity.copy().scale(deltaTime))
         entity.position.add(entity.velocity.copy().scale(deltaTime))
-        */
-
-        {
-            const k1 = world.gravity.copy()
-            const k2 = world.gravity.copy().add(k1.scale(0.5 * deltaTime))
-            const k3 = world.gravity.copy().add(k2.scale(0.5 * deltaTime))
-            const k4 = world.gravity.copy().add(k3.scale(deltaTime))
-
-            entity.velocity.add(k1.add(k2.scale(2)).add(k3.scale(2)).add(k4).scale(deltaTime / 6))
-        }
-
-        
-        {
-            const k1 = entity.velocity.copy()
-            const k2 = entity.velocity.copy().add(k1.scale(0.5 * deltaTime))
-            const k3 = entity.velocity.copy().add(k2.scale(0.5 * deltaTime))
-            const k4 = entity.velocity.copy().add(k3.scale(deltaTime))
-
-            entity.position.add(k1.add(k2.scale(2)).add(k3.scale(2)).add(k4).scale(deltaTime / 6))
-        }
     }
 }
 
